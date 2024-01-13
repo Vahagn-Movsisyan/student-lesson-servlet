@@ -1,0 +1,104 @@
+package com.example.studentlessonservlet.manager;
+
+import com.example.studentlessonservlet.db.DbConnectionProvider;
+import com.example.studentlessonservlet.model.Student;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class StudentManager {
+    private final Connection connection = DbConnectionProvider.getInstance().getConnection();
+    private final LessonManager lessonManager = new LessonManager();
+
+    public void addStudent(Student student) {
+        String sql = "INSERT INTO student(student_name, student_surname, student_email, student_age, lesson_id) VALUES (?,?,?,?,?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, student.getName());
+            preparedStatement.setString(2, student.getSurname());
+            preparedStatement.setString(3, student.getEmail());
+            preparedStatement.setInt(4, student.getAge());
+            preparedStatement.setInt(5, student.getLesson().getId());
+            preparedStatement.executeUpdate();
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                student.setId(generatedKeys.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteStudent(int id) {
+        String sql = "DELETE FROM student WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Student> getAllStudent() {
+        List<Student> students = new ArrayList<>();
+        String query = "SELECT * FROM student";
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                students.add(Student.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("student_name"))
+                        .surname(resultSet.getString("student_surname"))
+                        .email(resultSet.getString("student_email"))
+                        .age(resultSet.getInt("student_age"))
+                        .lesson(lessonManager.getLessonById(resultSet.getInt("lesson_id")))
+                        .build());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return students;
+    }
+
+    public Student getStudentByEmail(String email) {
+        String query = "SELECT * FROM student WHERE student_email = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Student.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("student_name"))
+                        .surname(resultSet.getString("student_surname"))
+                        .email(resultSet.getString("student_email"))
+                        .age(resultSet.getInt("student_age"))
+                        .lesson(lessonManager.getLessonById(resultSet.getInt("lesson_id")))
+                        .build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Student getStudentById(int id) {
+        String query = "SELECT * FROM student WHERE id =" + id;
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                return Student.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("student_name"))
+                        .surname(resultSet.getString("student_surname"))
+                        .email(resultSet.getString("student_email"))
+                        .age(resultSet.getInt("student_age"))
+                        .lesson(lessonManager.getLessonById(resultSet.getInt("lesson_id")))
+                        .build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
