@@ -12,13 +12,14 @@ public class StudentManager {
     private final LessonManager lessonManager = new LessonManager();
 
     public void addStudent(Student student) {
-        String sql = "INSERT INTO student(student_name, student_surname, student_email, student_age, lesson_id) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO student(pic_name, student_name, student_surname, student_email, student_age, lesson_id) VALUES (?,?,?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, student.getName());
-            preparedStatement.setString(2, student.getSurname());
-            preparedStatement.setString(3, student.getEmail());
-            preparedStatement.setInt(4, student.getAge());
-            preparedStatement.setInt(5, student.getLesson().getId());
+            preparedStatement.setString(1, student.getPicName());
+            preparedStatement.setString(2, student.getName());
+            preparedStatement.setString(3, student.getSurname());
+            preparedStatement.setString(4, student.getEmail());
+            preparedStatement.setInt(5, student.getAge());
+            preparedStatement.setInt(6, student.getLesson().getId());
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -47,6 +48,7 @@ public class StudentManager {
             while (resultSet.next()) {
                 students.add(Student.builder()
                         .id(resultSet.getInt("id"))
+                        .picName(resultSet.getString("pic_name"))
                         .name(resultSet.getString("student_name"))
                         .surname(resultSet.getString("student_surname"))
                         .email(resultSet.getString("student_email"))
@@ -69,6 +71,7 @@ public class StudentManager {
             if (resultSet.next()) {
                 return Student.builder()
                         .id(resultSet.getInt("id"))
+                        .picName(resultSet.getString("pic_name"))
                         .name(resultSet.getString("student_name"))
                         .surname(resultSet.getString("student_surname"))
                         .email(resultSet.getString("student_email"))
@@ -89,6 +92,7 @@ public class StudentManager {
             if (resultSet.next()) {
                 return Student.builder()
                         .id(resultSet.getInt("id"))
+                        .picName(resultSet.getString("pic_name"))
                         .name(resultSet.getString("student_name"))
                         .surname(resultSet.getString("student_surname"))
                         .email(resultSet.getString("student_email"))

@@ -21,6 +21,6 @@ public class StudentsServlet extends HttpServlet {
         List<Student> students = studentManager.getAllStudent();
         req.setAttribute("students", students);
 
-        req.getRequestDispatcher("/students.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/students.jsp").forward(req, resp);
     }
 }

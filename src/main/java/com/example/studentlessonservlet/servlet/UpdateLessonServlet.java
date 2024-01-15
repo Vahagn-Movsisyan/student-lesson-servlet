@@ -15,20 +15,20 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 
-@WebServlet(urlPatterns = "/addLesson")
-@MultipartConfig (maxFileSize = 1024 * 1024 * 5, //5mb
+@WebServlet(urlPatterns = "/updateLesson")
+@MultipartConfig(
+        maxFileSize = 1024 * 1024 * 5, //5mb
         maxRequestSize = 1024 * 1024 * 10,
-        fileSizeThreshold = 1024 * 1024 * 1)
-public class AddLessonsServlet extends HttpServlet {
+        fileSizeThreshold = 1024 * 1024 * 1
+)
+public class UpdateLessonServlet extends HttpServlet {
     private final LessonManager lessonManager = new LessonManager();
     private final String UPLOAD_DIRECTORY = "C:\\Users\\aperk\\IdeaProjects\\student-lesson-servlet\\downloadImage";
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/addLesson.jsp").forward(req, resp);
-        if (req.getAttribute("emailError") == null) {
-            req.setAttribute("emailError", false);
-        }
+        Lesson id = lessonManager.getLessonById(Integer.parseInt(req.getParameter("id")));
+        req.setAttribute("lesson", id);
+        req.getRequestDispatcher("/WEB-INF/updateLesson.jsp");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class AddLessonsServlet extends HttpServlet {
                 pictureName = System.currentTimeMillis() + "_" + picture.getSubmittedFileName();
                 picture.write(UPLOAD_DIRECTORY + File.separator + pictureName);
             }
-            lessonManager.addLesson(Lesson.builder()
+            lessonManager.updateLesson(Lesson.builder()
                     .name(req.getParameter("lessonName"))
                     .duration(TimeUtil.stringToTime(req.getParameter("lessonDuration")))
                     .lecturerName(req.getParameter("lessonLecturerName"))
@@ -48,7 +48,7 @@ public class AddLessonsServlet extends HttpServlet {
                     .picName(pictureName)
                     .build());
             resp.sendRedirect("/lessons");
-        } catch (ParseException | IOException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }

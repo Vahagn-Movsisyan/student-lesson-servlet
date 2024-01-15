@@ -23,7 +23,7 @@ public class AddStudentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Lesson> lessons = lessonManager.getAllLessons();
         req.setAttribute("lessons", lessons);
-        req.getRequestDispatcher("/addStudent.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req, resp);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class AddStudentServlet extends HttpServlet {
                 }
             } else {
                 req.setAttribute("emailError", true);
-                req.getRequestDispatcher("/addStudent.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req, resp);
             }
         } else {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error retrieving lessons");

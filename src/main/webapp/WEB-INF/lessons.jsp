@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>Lesson</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 
 </head>
 <body class="body_lessons">
@@ -23,10 +23,12 @@
     <thead>
     <tr>
         <th>Lesson Id</th>
+        <th>Picture</th>
         <th>Name</th>
         <th>Duration</th>
         <th>Lecturer</th>
         <th>Price</th>
+        <th>Update</th>
         <th>Delete</th>
     </tr>
     </thead>
@@ -36,10 +38,16 @@
     %>
     <tr>
         <td><%= lesson.getId() %></td>
+        <th><% if (lesson.getPicName() != null) { %>
+            <img src="/downloadImage?imageName=<%=lesson.getPicName()%>" width="20">
+            <% } else { %>
+            <img src="/userDefaultIMG/user.png" width="20">
+            <% } %></th>
         <td><%= lesson.getName() %></td>
         <th><%=lesson.getDuration()%></th>
         <td><%= lesson.getLecturerName() %></td>
         <th><%=lesson.getPrice()%></th>
+        <th><a class="update-button" href="/updateLesson?id=<%=lesson.getId()%>">Update</a></th>
         <td><a class="remove-button" href="/deleteLesson?id=<%= lesson.getId() %>">Remove</a></td>
     </tr>
     <%

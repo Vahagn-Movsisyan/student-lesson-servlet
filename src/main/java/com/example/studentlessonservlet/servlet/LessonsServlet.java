@@ -20,6 +20,6 @@ public class LessonsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Lesson> lessons = lessonManager.getAllLessons();
         req.setAttribute("lessons", lessons);
-        req.getRequestDispatcher("/lessons.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/lessons.jsp").forward(req, resp);
     }
 }

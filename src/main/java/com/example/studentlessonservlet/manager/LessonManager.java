@@ -11,19 +11,20 @@ public class LessonManager {
     private final Connection connection = DbConnectionProvider.getInstance().getConnection();
 
     public void addLesson(Lesson lesson) {
-        String sql = "INSERT INTO lesson(lesson_name, lesson_duration, lesson_lacturer_name, lesson_price) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO lesson(lesson_name, lesson_duration, lesson_lacturer_name, lesson_price, pic_name) VALUES (?,?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, lesson.getName());
-            preparedStatement.setTime(2,  lesson.getDuration());
+            preparedStatement.setTime(2, lesson.getDuration());
             preparedStatement.setString(3, lesson.getLecturerName());
             preparedStatement.setDouble(4, lesson.getPrice());
+            preparedStatement.setString(5, lesson.getPicName());
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 int id = generatedKeys.getInt(1);
                 lesson.setId(id);
             }
-        } catch (SQLException  e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -32,6 +33,21 @@ public class LessonManager {
         String sql = "DELETE FROM lesson WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateLesson(Lesson lesson) {
+        String sql = "UPDATE lesson SET lesson_name = ?, lesson_duration = ?, lesson_lacturer_name = ?, lesson_price = ?, pic_name = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, lesson.getName());
+            preparedStatement.setTime(2, lesson.getDuration());
+            preparedStatement.setString(3, lesson.getLecturerName());
+            preparedStatement.setDouble(4, lesson.getPrice());
+            preparedStatement.setString(5, lesson.getPicName());
+            preparedStatement.setInt(6, lesson.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,9 +66,10 @@ public class LessonManager {
                         .duration(resultSet.getTime("lesson_duration"))
                         .lecturerName(resultSet.getString("lesson_lacturer_name"))
                         .price(resultSet.getDouble("lesson_price"))
+                        .picName(resultSet.getString("pic_name"))
                         .build());
             }
-        } catch (SQLException  e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -70,6 +87,7 @@ public class LessonManager {
                         .duration(resultSet.getTime("lesson_duration"))
                         .lecturerName(resultSet.getString("lesson_lacturer_name"))
                         .price(resultSet.getDouble("lesson_price"))
+                        .picName(resultSet.getString("pic_name"))
                         .build();
             }
         } catch (SQLException e) {
