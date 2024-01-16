@@ -23,7 +23,6 @@
     <thead>
     <tr>
         <th>Lesson Id</th>
-        <th>Picture</th>
         <th>Name</th>
         <th>Duration</th>
         <th>Lecturer</th>
@@ -38,11 +37,6 @@
     %>
     <tr>
         <td><%= lesson.getId() %></td>
-        <th><% if (lesson.getPicName() != null) { %>
-            <img src="/downloadImage?imageName=<%=lesson.getPicName()%>" width="20">
-            <% } else { %>
-            <img src="/userDefaultIMG/user.png" width="20">
-            <% } %></th>
         <td><%= lesson.getName() %></td>
         <th><%=lesson.getDuration()%></th>
         <td><%= lesson.getLecturerName() %></td>

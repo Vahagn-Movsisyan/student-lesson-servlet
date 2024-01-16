@@ -63,6 +63,21 @@ public class StudentManager {
         return students;
     }
 
+    public void updateStudent (Student student) {
+        String sql = "UPDATE student SET pic_name = ?, student_name = ?, student_surname  = ?, student_email = ?, student_age = ?  WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1,student.getPicName());
+            preparedStatement.setString(2,  student.getName());
+            preparedStatement.setString(3, student.getSurname());
+            preparedStatement.setString(4, student.getEmail());
+            preparedStatement.setInt(5, student.getAge());
+            preparedStatement.setInt(6, student.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Student getStudentByEmail(String email) {
         String query = "SELECT * FROM student WHERE student_email = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {

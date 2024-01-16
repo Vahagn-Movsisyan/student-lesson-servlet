@@ -11,13 +11,12 @@ public class LessonManager {
     private final Connection connection = DbConnectionProvider.getInstance().getConnection();
 
     public void addLesson(Lesson lesson) {
-        String sql = "INSERT INTO lesson(lesson_name, lesson_duration, lesson_lacturer_name, lesson_price, pic_name) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO lesson(lesson_name, lesson_duration, lesson_lacturer_name, lesson_price) VALUES (?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, lesson.getName());
             preparedStatement.setTime(2, lesson.getDuration());
             preparedStatement.setString(3, lesson.getLecturerName());
             preparedStatement.setDouble(4, lesson.getPrice());
-            preparedStatement.setString(5, lesson.getPicName());
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -40,14 +39,13 @@ public class LessonManager {
     }
 
     public void updateLesson(Lesson lesson) {
-        String sql = "UPDATE lesson SET lesson_name = ?, lesson_duration = ?, lesson_lacturer_name = ?, lesson_price = ?, pic_name = ? WHERE id = ?";
+        String sql = "UPDATE lesson SET lesson_name = ?, lesson_duration = ?, lesson_lacturer_name = ?, lesson_price = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, lesson.getName());
             preparedStatement.setTime(2, lesson.getDuration());
             preparedStatement.setString(3, lesson.getLecturerName());
             preparedStatement.setDouble(4, lesson.getPrice());
-            preparedStatement.setString(5, lesson.getPicName());
-            preparedStatement.setInt(6, lesson.getId());
+            preparedStatement.setInt(5, lesson.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,7 +64,6 @@ public class LessonManager {
                         .duration(resultSet.getTime("lesson_duration"))
                         .lecturerName(resultSet.getString("lesson_lacturer_name"))
                         .price(resultSet.getDouble("lesson_price"))
-                        .picName(resultSet.getString("pic_name"))
                         .build());
             }
         } catch (SQLException e) {
@@ -81,13 +78,12 @@ public class LessonManager {
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
-                return Lesson.builder()
-                        .id(resultSet.getInt("id"))
+                 return Lesson.builder()
+                         .id(resultSet.getInt("id"))
                         .name(resultSet.getString("lesson_name"))
                         .duration(resultSet.getTime("lesson_duration"))
                         .lecturerName(resultSet.getString("lesson_lacturer_name"))
                         .price(resultSet.getDouble("lesson_price"))
-                        .picName(resultSet.getString("pic_name"))
                         .build();
             }
         } catch (SQLException e) {

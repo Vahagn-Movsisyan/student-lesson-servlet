@@ -23,11 +23,13 @@
     <thead>
     <tr>
         <th>Student Id</th>
+        <th>Picture</th>
         <th>Name</th>
         <th>Surname</th>
         <th>Email</th>
         <th>Age</th>
         <th>Lesson</th>
+        <th>Update</th>
         <th>Delete</th>
     </tr>
     </thead>
@@ -37,11 +39,19 @@
     %>
     <tr>
         <td><%= student.getId() %></td>
+        <th>
+            <%if (student.getPicName() != null && !student.getPicName().isEmpty()) {%>
+            <img src="/downloadImage?imageName=<%=student.getPicName()%>" width="50">
+            <%} else {%>
+            <img src="../userDefaultImg/user.png" width="50">
+            <%}%>
+        </th>
         <td><%= student.getName() %></td>
         <th><%=student.getSurname()%></th>
         <td><%= student.getEmail() %></td>
         <th><%=student.getAge()%></th>
         <td><%= student.getLesson().getName() %></td>
+        <td><a class="update-button" href="/updateStudent?id=<%= student.getId() %>">Update</a></td>
         <td><a class="remove-button" href="/deleteStudent?id=<%= student.getId() %>">Remove</a></td>
     </tr>
     <%

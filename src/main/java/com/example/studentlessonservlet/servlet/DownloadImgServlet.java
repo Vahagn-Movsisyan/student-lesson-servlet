@@ -12,21 +12,20 @@ import java.io.OutputStream;
 
 @WebServlet(urlPatterns = "/downloadImage")
 public class DownloadImgServlet extends HttpServlet {
-    private static final String UPLOAD_DIRECTORY = "C:\\Users\\aperk\\IdeaProjects\\student-lesson-servlet\\downloadImage";
-
+    private final String UPLOAD_DIRECTORY = "C:\\Users\\aperk\\IdeaProjects\\student-lesson-servlet\\uploadDirectory";
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String imageName = req.getParameter("pictureName");
+        String imageName = req.getParameter("imageName");
 
-        // читает входной файл из абсолютного пути
+        // reads input file from an absolute path
         File imageFile = new File(UPLOAD_DIRECTORY, imageName);
         if (imageFile.exists()) {
             try (FileInputStream inStream = new FileInputStream(imageFile)) {
-                // изменяет ответ
+                // modifies response
                 resp.setContentType("image/jpeg");
                 resp.setContentLength((int) imageFile.length());
 
-                // получает выходной поток ответа
+                // obtains response's output stream
                 OutputStream outStream = resp.getOutputStream();
 
                 byte[] buffer = new byte[4096];
@@ -38,6 +37,7 @@ public class DownloadImgServlet extends HttpServlet {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
     }
 }

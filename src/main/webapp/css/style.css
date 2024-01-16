@@ -35,6 +35,13 @@ h1 {
     margin: 20px 0;
 }
 
+h2 {
+    color: #fff;
+    font-size: 4rem;
+    text-align: center;
+    margin: 20px 0;
+}
+
 a {
     color: #fff;
     text-decoration: none;
