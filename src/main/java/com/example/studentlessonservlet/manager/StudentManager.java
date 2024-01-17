@@ -63,6 +63,7 @@ public class StudentManager {
         return students;
     }
 
+
     public void updateStudent (Student student) {
         String sql = "UPDATE student SET pic_name = ?, student_name = ?, student_surname  = ?, student_email = ?, student_age = ?  WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

@@ -6,6 +6,8 @@
     <title>Students</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/checkEmail.js"></script>
+    <script src="../js/lessonSearch.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body class="body_addStudent">
 <%
@@ -21,14 +23,15 @@
     Surname: <input type="text" name="studentSurname"> <br>
     Email: <input type="email" name="studentEmail" id="studentEmail"> <span id="emailError" style="display: <%= emailError ? "inline" : "none" %>; color: red; font-weight: bold;">❗Email already existed</span> <br>
     Age: <input type="number" name="studentAge"> <br>
-    <select name="studentId">
+    <input type="text" id="lessonSearchInput" name="search" placeholder="Search for lessons">
+    <select name="studentId" style="display: none;">
         <% for (Lesson lesson : lessons) { %>
-        <option value="<%= lesson.getId() %>">
+        <option value="<%= lesson.getId() %>" data-lesson-name="<%= lesson.getName() %>">
             <%= lesson.getName() %>
         </option>
         <% } %>
     </select> <br>
-        <input type="file" name="picture">
+    <input type="file" name="picture">
     <input type="submit" value="add">
 </form>
 </body>

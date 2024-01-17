@@ -7,6 +7,7 @@
     <title>Update Student</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/checkEmail.js"></script>
+    <script src="../js/lessonSearch.js"></script>
 </head>
 <body class="body_addStudent">
 <%
@@ -26,19 +27,20 @@
 <p>No picture available.</p>
 <% } %>
 
-<form method="post" action="/addStudent" enctype="multipart/form-data">
-    Name: <input type="text" name="studentName"> <br>
-    Surname: <input type="text" name="studentSurname"> <br>
-    Email: <input type="email" name="studentEmail" id="studentEmail"> <span id="emailError" style="display: <%= emailError ? "inline" : "none" %>; color: red; font-weight: bold;">❗Email already existed</span> <br>
-    Age: <input type="number" name="studentAge"> <br>
-    <select name="studentId">
+<form method="post" action="/updateStudent" enctype="multipart/form-data">
+    <input type="hidden" name="studentId" value="<%=student.getId()%>">
+    Name: <input type="text" name="studentName" value="<%=student.getName()%>"> <br>
+    Surname: <input type="text" name="studentSurname" value="<%=student.getSurname()%>"><br>
+    Email: <input type="email" name="studentEmail" id="studentEmail" value="<%=student.getEmail()%>"> <span id="emailError" style="display: <%= emailError ? "inline" : "none" %>; color: red; font-weight: bold;">❗Email already existed</span> <br>
+    Age: <input type="number" name="studentAge" value="<%=student.getAge()%>"> <br>
+    <input type="text" id="lessonSearchInput" placeholder="Search for lessons">
+    <select name="lessonId">
         <% for (Lesson lesson : lessons) { %>
         <option value="<%= lesson.getId() %>">
-            <%= student.getLesson().getName() %>
+            <%= lesson.getName() %>
         </option>
         <% } %>
     </select> <br>
-
     <input type="file" name="newPicture">
     <input type="submit" value="update">
 </form>

@@ -18,7 +18,6 @@ import java.util.List;
 
 @WebServlet(urlPatterns = "/updateStudent")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 10, fileSizeThreshold = 1024 * 1024 * 1)
-
 public class UpdateStudentServlet extends HttpServlet {
     private final LessonManager lessonManager = new LessonManager();
     private final StudentManager studentManager = new StudentManager();
@@ -26,10 +25,10 @@ public class UpdateStudentServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Student studentById = studentManager.getStudentById(Integer.parseInt(req.getParameter("id")));
-        List<Lesson> lessons = lessonManager.getAllLessons();
-        req.setAttribute("lesson", lessons);
-        req.setAttribute("student", studentById);
+        Student student = studentManager.getStudentById(Integer.parseInt(req.getParameter("id")));
+        List<Lesson> lesson = lessonManager.getAllLessons();
+        req.setAttribute("lesson", lesson);
+        req.setAttribute("student", student);
         req.getRequestDispatcher("/WEB-INF/updateStudent.jsp").forward(req, resp);
     }
 
@@ -45,12 +44,13 @@ public class UpdateStudentServlet extends HttpServlet {
                     picture.write(UPLOAD_DIRECTORY + File.separator + pictureName);
                 }
                 studentManager.updateStudent(Student.builder()
+                        .id(Integer.parseInt(req.getParameter("studentId")))
                         .picName(pictureName)
                         .name(req.getParameter("studentName"))
                         .surname(req.getParameter("studentSurname"))
                         .email(email)
                         .age(Integer.parseInt(req.getParameter("studentAge")))
-                        .lesson(lessonManager.getLessonById(Integer.parseInt(req.getParameter("studentId"))))
+                        .lesson(lessonManager.getLessonById(Integer.parseInt(req.getParameter("lessonId"))))
                         .build());
                 resp.sendRedirect("/students");
             } catch (NumberFormatException e) {
@@ -59,8 +59,7 @@ public class UpdateStudentServlet extends HttpServlet {
             }
         } else {
             req.setAttribute("emailError", true);
-            req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/updateStudent.jsp").forward(req, resp);
         }
     }
 }
-

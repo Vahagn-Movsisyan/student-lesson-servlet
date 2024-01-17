@@ -38,6 +38,27 @@ public class LessonManager {
         }
     }
 
+    public List<Lesson> searchLessons(String searchQuery) {
+        List<Lesson> matchingLessons = new ArrayList<>();
+        String sql = "SELECT * FROM lesson WHERE lesson_name LIKE ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, "%" + searchQuery + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                matchingLessons.add(Lesson.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("lesson_name"))
+                        .duration(resultSet.getTime("lesson_duration"))
+                        .lecturerName(resultSet.getString("lesson_lacturer_name"))
+                        .price(resultSet.getDouble("lesson_price"))
+                        .build());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return matchingLessons;
+    }
+
     public void updateLesson(Lesson lesson) {
         String sql = "UPDATE lesson SET lesson_name = ?, lesson_duration = ?, lesson_lacturer_name = ?, lesson_price = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
