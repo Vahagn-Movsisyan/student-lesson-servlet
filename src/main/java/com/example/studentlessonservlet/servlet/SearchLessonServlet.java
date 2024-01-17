@@ -19,7 +19,6 @@ public class SearchLessonServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String searchQuery = req.getParameter("searchQuery");
         if (searchQuery == null || searchQuery.trim().isEmpty()) {
-            // Возвращаем все уроки, если запрос пуст
             List<Lesson> allLessons = lessonManager.getAllLessons();
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
