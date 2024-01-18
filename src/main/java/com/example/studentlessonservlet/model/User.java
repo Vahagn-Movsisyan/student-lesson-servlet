@@ -5,18 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Time;
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Lesson {
+public class User {
     private int id;
-    private String name;
-    private Time duration;
-    private String lecturerName;
-    private double price;
-    private User user;
+    private String username;
+    private String email;
+    private String password;
 }

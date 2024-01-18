@@ -12,7 +12,6 @@
     Duration: <input type="time" name="lessonDuration"><br>
     Lecturer Name: <input type="text" name="lessonLecturerName"><br>
     Price: <input type="number" name="lessonPrice"><br>
-    <input type="file" name="pictureName"> <br>
     <input type="submit" value="add">
 </form>
 </body>

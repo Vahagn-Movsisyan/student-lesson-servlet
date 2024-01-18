@@ -28,6 +28,16 @@
     background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(29, 253, 119, 1) 54%, rgba(252, 176, 69, 1) 100%);
 }
 
+.body_login, .body_register {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: rgb(236,48,130);
+    background: radial-gradient(circle, rgba(236,48,130,1) 22%, rgba(217,21,68,1) 51%, rgba(148,187,233,1) 59%);
+}
+
 h1 {
     color: #fff;
     font-size: 4rem;
@@ -94,6 +104,7 @@ label {
 
 input[type="text"],
 input[type="email"],
+input[type="password"]
 input[type="time"],
 input[type="number"] {
     width: 100%;
@@ -103,8 +114,6 @@ input[type="number"] {
     margin-bottom: 15px;
     font-size: 18px;
     transition: 0.2s ease-in-out;
-
-
     background-color: #f5f5f5;
     border-color: #ddd;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -112,6 +121,7 @@ input[type="number"] {
 
 input[type="text"]:hover,
 input[type="email"]:hover,
+input[type="password"]:hover,
 input[type="time"]:hover,
 input[type="number"]:hover {
     border-color: #54a0ff;
@@ -203,6 +213,11 @@ a.update-button:hover {
 
 a.remove-button:hover {
     background-color: #da1f0b;
+}
+
+.a_default {
+    font-family: Bahnschrift;
+    color: white;
 }
 
 a.button {

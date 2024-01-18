@@ -9,14 +9,16 @@ import java.util.List;
 
 public class LessonManager {
     private final Connection connection = DbConnectionProvider.getInstance().getConnection();
+    private final UserManager userManager = new UserManager();
 
     public void addLesson(Lesson lesson) {
-        String sql = "INSERT INTO lesson(lesson_name, lesson_duration, lesson_lacturer_name, lesson_price) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO lesson(lesson_name, lesson_duration, lesson_lacturer_name, lesson_price, user_id) VALUES (?,?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, lesson.getName());
             preparedStatement.setTime(2, lesson.getDuration());
             preparedStatement.setString(3, lesson.getLecturerName());
             preparedStatement.setDouble(4, lesson.getPrice());
+            preparedStatement.setInt(5, lesson.getUser().getId());
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -51,6 +53,7 @@ public class LessonManager {
                         .duration(resultSet.getTime("lesson_duration"))
                         .lecturerName(resultSet.getString("lesson_lacturer_name"))
                         .price(resultSet.getDouble("lesson_price"))
+                        .user(userManager.getUserById(resultSet.getInt("user_id")))
                         .build());
             }
         } catch (SQLException e) {
@@ -85,6 +88,7 @@ public class LessonManager {
                         .duration(resultSet.getTime("lesson_duration"))
                         .lecturerName(resultSet.getString("lesson_lacturer_name"))
                         .price(resultSet.getDouble("lesson_price"))
+                        .user(userManager.getUserById(resultSet.getInt("user_id")))
                         .build());
             }
         } catch (SQLException e) {
@@ -105,7 +109,8 @@ public class LessonManager {
                         .duration(resultSet.getTime("lesson_duration"))
                         .lecturerName(resultSet.getString("lesson_lacturer_name"))
                         .price(resultSet.getDouble("lesson_price"))
-                        .build();
+                         .user(userManager.getUserById(resultSet.getInt("user_id")))
+                         .build();
             }
         } catch (SQLException e) {
             e.printStackTrace();

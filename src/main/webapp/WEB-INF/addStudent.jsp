@@ -23,10 +23,9 @@
     Surname: <input type="text" name="studentSurname"> <br>
     Email: <input type="email" name="studentEmail" id="studentEmail"> <span id="emailError" style="display: <%= emailError ? "inline" : "none" %>; color: red; font-weight: bold;">❗Email already existed</span> <br>
     Age: <input type="number" name="studentAge"> <br>
-    <input type="text" id="lessonSearchInput" name="search" placeholder="Search for lessons">
-    <select name="studentId" style="display: none;">
+    <select name="studentId">
         <% for (Lesson lesson : lessons) { %>
-        <option value="<%= lesson.getId() %>" data-lesson-name="<%= lesson.getName() %>">
+        <option value="<%= lesson.getId() %>">
             <%= lesson.getName() %>
         </option>
         <% } %>
