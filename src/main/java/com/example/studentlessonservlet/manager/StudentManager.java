@@ -105,6 +105,29 @@ public class StudentManager {
         return null;
     }
 
+    public Student getStudentByUserId(int userId) {
+        String query = "SELECT * FROM student WHERE user_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Student.builder()
+                        .id(resultSet.getInt("id"))
+                        .picName(resultSet.getString("pic_name"))
+                        .name(resultSet.getString("student_name"))
+                        .surname(resultSet.getString("student_surname"))
+                        .email(resultSet.getString("student_email"))
+                        .age(resultSet.getInt("student_age"))
+                        .lesson(lessonManager.getLessonById(resultSet.getInt("lesson_id")))
+                        .user(userManager.getUserById(resultSet.getInt("user_id")))
+                        .build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Student getStudentById(int id) {
         String query = "SELECT * FROM student WHERE id =" + id;
         try (Statement statement = connection.createStatement()) {

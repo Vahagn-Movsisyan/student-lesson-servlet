@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/checkEmail.js"></script>
     <script src="../js/lessonSearch.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body class="body_addStudent">
 <%

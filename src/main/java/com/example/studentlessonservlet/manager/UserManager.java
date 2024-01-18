@@ -42,4 +42,22 @@ public class UserManager {
         }
         return null;
     }
+    public User getUserByEmail(String email) {
+        String query = "SELECT * FROM user WHERE email = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return User.builder()
+                        .id(resultSet.getInt("id"))
+                        .username(resultSet.getString("username"))
+                        .email(resultSet.getString("email"))
+                        .password(resultSet.getString("password"))
+                        .build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

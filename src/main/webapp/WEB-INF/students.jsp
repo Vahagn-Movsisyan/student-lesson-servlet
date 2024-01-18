@@ -1,5 +1,6 @@
 <%@ page import="com.example.studentlessonservlet.model.Student" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.example.studentlessonservlet.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -10,6 +11,7 @@
 <body class="body_students">
 <%
     List<Student> students = (List<Student>) request.getAttribute("students");
+    User user = (User) session.getAttribute("user");
 %>
 
 <h1>Students</h1>
@@ -29,6 +31,7 @@
         <th>Email</th>
         <th>Age</th>
         <th>Lesson</th>
+        <th>User Added</th>
         <th>Update</th>
         <th>Delete</th>
     </tr>
@@ -51,6 +54,7 @@
         <td><%= student.getEmail() %></td>
         <th><%=student.getAge()%></th>
         <td><%= student.getLesson().getName() %></td>
+        <th><%=student.getUser().getUsername()%></th>
         <td><a class="update-button" href="/updateStudent?id=<%= student.getId() %>">Update</a></td>
         <td><a class="remove-button" href="/deleteStudent?id=<%= student.getId() %>">Remove</a></td>
     </tr>

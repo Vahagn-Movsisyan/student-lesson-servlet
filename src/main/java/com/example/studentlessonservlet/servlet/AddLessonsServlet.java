@@ -27,16 +27,22 @@ public class AddLessonsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            lessonManager.addLesson(Lesson.builder()
-                    .name(req.getParameter("lessonName"))
-                    .duration(TimeUtil.stringToTime(req.getParameter("lessonDuration")))
-                    .lecturerName(req.getParameter("lessonLecturerName"))
-                    .price(Double.parseDouble(req.getParameter("lessonPrice")))
-                    .build());
-            resp.sendRedirect("/lessons");
-        } catch (ParseException  e) {
-            e.printStackTrace();
+        String lessonName = req.getParameter("lessonName");
+        if (lessonManager.getLessonByName(lessonName) == null) {
+            try {
+                lessonManager.addLesson(Lesson.builder()
+                        .name("lessonName")
+                        .duration(TimeUtil.stringToTime(req.getParameter("lessonDuration")))
+                        .lecturerName(req.getParameter("lessonLecturerName"))
+                        .price(Double.parseDouble(req.getParameter("lessonPrice")))
+                        .build());
+                resp.sendRedirect("/lessons");
+            } catch (ParseException  e) {
+                e.printStackTrace();
+            }
+        } else {
+            req.getSession().setAttribute("msg", lessonName + " is already existed");
+            req.getRequestDispatcher("/WEB-INF/addLesson.jsp" ).forward(req, resp);
         }
     }
 }

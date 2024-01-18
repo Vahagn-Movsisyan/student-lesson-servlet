@@ -2,6 +2,7 @@ package com.example.studentlessonservlet.manager;
 
 import com.example.studentlessonservlet.db.DbConnectionProvider;
 import com.example.studentlessonservlet.model.Lesson;
+import com.example.studentlessonservlet.model.Student;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,6 @@ import java.util.List;
 public class LessonManager {
     private final Connection connection = DbConnectionProvider.getInstance().getConnection();
     private final UserManager userManager = new UserManager();
-
     public void addLesson(Lesson lesson) {
         String sql = "INSERT INTO lesson(lesson_name, lesson_duration, lesson_lacturer_name, lesson_price, user_id) VALUES (?,?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -97,6 +97,49 @@ public class LessonManager {
         }
         return lessons;
     }
+
+    public Lesson getLessonByUserId(int userId) {
+        String query = "SELECT * FROM student WHERE user_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Lesson.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("lesson_name"))
+                        .duration(resultSet.getTime("lesson_duration"))
+                        .lecturerName(resultSet.getString("lesson_lacturer_name"))
+                        .price(resultSet.getDouble("lesson_price"))
+                        .user(userManager.getUserById(resultSet.getInt("user_id")))
+                        .build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Lesson getLessonByName(String name) {
+        String query = "SELECT * FROM lesson WHERE lesson_name = '" + name + "'";
+
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                return Lesson.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("lesson_name"))
+                        .duration(resultSet.getTime("lesson_duration"))
+                        .lecturerName(resultSet.getString("lesson_lecturer_name"))
+                        .price(resultSet.getDouble("lesson_price"))
+                        .user(userManager.getUserById(resultSet.getInt("user_id")))
+                        .build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public Lesson getLessonById(int id) {
         String query = "SELECT * FROM lesson WHERE id =" + id;

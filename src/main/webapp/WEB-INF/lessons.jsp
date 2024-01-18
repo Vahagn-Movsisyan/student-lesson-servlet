@@ -27,6 +27,7 @@
         <th>Duration</th>
         <th>Lecturer</th>
         <th>Price</th>
+        <th>User Added</th>
         <th>Update</th>
         <th>Delete</th>
     </tr>
@@ -41,6 +42,7 @@
         <th><%=lesson.getDuration()%></th>
         <td><%= lesson.getLecturerName() %></td>
         <th><%=lesson.getPrice()%></th>
+        <th><%=lesson.getUser().getUsername()%></th>
         <th><a class="update-button" href="/updateLesson?id=<%=lesson.getId()%>">Update</a></th>
         <td><a class="remove-button" href="/deleteLesson?id=<%= lesson.getId() %>">Remove</a></td>
     </tr>

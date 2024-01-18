@@ -104,7 +104,7 @@ label {
 
 input[type="text"],
 input[type="email"],
-input[type="password"]
+input[type="password"],
 input[type="time"],
 input[type="number"] {
     width: 100%;
