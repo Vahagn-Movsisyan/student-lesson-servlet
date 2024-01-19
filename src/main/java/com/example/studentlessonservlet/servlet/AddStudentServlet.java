@@ -4,6 +4,7 @@ import com.example.studentlessonservlet.manager.LessonManager;
 import com.example.studentlessonservlet.manager.StudentManager;
 import com.example.studentlessonservlet.model.Lesson;
 import com.example.studentlessonservlet.model.Student;
+import com.example.studentlessonservlet.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -25,7 +26,8 @@ public class AddStudentServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Lesson> lessons = lessonManager.getAllLessons();
+        User user = (User) req.getSession().getAttribute("user");
+        List<Lesson> lessons = lessonManager.getLessonsByUser(user.getId());
         req.setAttribute("lessons", lessons);
         req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req, resp);
     }
@@ -33,36 +35,31 @@ public class AddStudentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("studentEmail");
-        List<Lesson> lessons = lessonManager.getAllLessons();
-        req.setAttribute("lessons", lessons);
-        if (lessons != null) {
-            if (studentManager.getStudentByEmail(email) == null) {
-                try {
-                    Part picture = req.getPart("picture");
-                    String pictureName = null;
-                    if (picture != null && picture.getSize() > 0) {
-                        pictureName = System.currentTimeMillis() + "_" + picture.getSubmittedFileName();
-                        picture.write(UPLOAD_DIRECTORY + File.separator + pictureName);
-                    }
-                    studentManager.addStudent(Student.builder()
-                            .picName(pictureName)
-                            .name(req.getParameter("studentName"))
-                            .surname(req.getParameter("studentSurname"))
-                            .email(email)
-                            .age(Integer.parseInt(req.getParameter("studentAge")))
-                            .lesson(lessonManager.getLessonById(Integer.parseInt(req.getParameter("studentId"))))
-                            .build());
-                    resp.sendRedirect("/students");
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input for age or lessonId");
+        if (studentManager.getStudentByEmail(email) == null) {
+            try {
+                Part picture = req.getPart("picture");
+                String pictureName = null;
+                if (picture != null && picture.getSize() > 0) {
+                    pictureName = System.currentTimeMillis() + "_" + picture.getSubmittedFileName();
+                    picture.write(UPLOAD_DIRECTORY + File.separator + pictureName);
                 }
-            } else {
-                req.setAttribute("emailError", true);
-                req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req, resp);
+                studentManager.addStudent(Student.builder()
+                        .picName(pictureName)
+                        .name(req.getParameter("studentName"))
+                        .surname(req.getParameter("studentSurname"))
+                        .email(email)
+                        .age(Integer.parseInt(req.getParameter("studentAge")))
+                        .lesson(lessonManager.getLessonById(Integer.parseInt(req.getParameter("studentId"))))
+                        .user((User) req.getSession().getAttribute("user"))
+                        .build());
+                resp.sendRedirect("/students");
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input for age or lessonId");
             }
         } else {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error retrieving lessons");
+            req.setAttribute("emailError", true);
+            req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req, resp);
         }
     }
 }

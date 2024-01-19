@@ -42,9 +42,9 @@ public class StudentManager {
         }
     }
 
-    public List<Student> getAllStudent() {
+    public List<Student> getStudentByUser(int userId) {
         List<Student> students = new ArrayList<>();
-        String query = "SELECT * FROM student";
+        String query = "SELECT * FROM student WHERE user_id = '" + userId + "'";
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
@@ -65,7 +65,6 @@ public class StudentManager {
         }
         return students;
     }
-
 
     public void updateStudent (Student student) {
         String sql = "UPDATE student SET pic_name = ?, student_name = ?, student_surname  = ?, student_email = ?, student_age = ?  WHERE id = ?";

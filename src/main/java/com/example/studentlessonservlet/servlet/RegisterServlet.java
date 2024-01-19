@@ -13,6 +13,12 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/register")
 public class RegisterServlet extends HttpServlet {
     private final UserManager userManager = new UserManager();
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/register.jsp").forward(req, resp);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
@@ -24,7 +30,7 @@ public class RegisterServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/register.jsp").forward(req, resp);
         } else if (!confirmPassword.equals(password)) {
             req.getSession().setAttribute("msg", "Confirm password is wrong");
-            req.getRequestDispatcher("/register.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF//register.jsp").forward(req, resp);
         } else {
             userManager.addUser(User.builder()
                     .username(req.getParameter("username"))

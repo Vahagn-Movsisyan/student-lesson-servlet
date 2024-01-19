@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Register</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="body_register">
 <div class="register-container">
@@ -12,7 +12,7 @@
         <input type="text" id="username" name="username" required>
 
         <%if (session.getAttribute("msg") != null) { %>
-        <span style="color: red; font-weight: bold;">❗<%session.getAttribute("msg");%></span>
+        <span style="color: red; font-weight: bold;">❗<%=session.getAttribute("msg")%></span>
         <%session.removeAttribute("msg");%>
         <%}%>
 
@@ -20,7 +20,7 @@
         <input type="email" id="email" name="email" required>
 
         <%if (session.getAttribute("msg") != null) { %>
-        <span style="color: red; font-weight: bold;">❗<%session.getAttribute("msg");%></span>
+        <span style="color: red; font-weight: bold;">❗<%=session.getAttribute("msg")%></span>
         <%session.removeAttribute("msg");%>
         <%}%>
 
@@ -32,7 +32,7 @@
 
         <input type="submit" value="Register">
     </form>
-    <a class="a_default" href="index.jsp">Login here</a>
+    <a class="a_default" href="/">Login here</a>
 </div>
 </body>
 </html>

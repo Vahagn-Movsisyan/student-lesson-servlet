@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect("/home");
         } else {
             req.getSession().setAttribute("msg", "Invalid Email or Password");
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            req.getRequestDispatcher("/").forward(req, resp);
         }
     }
 }

@@ -4,6 +4,7 @@ import com.example.studentlessonservlet.manager.LessonManager;
 import com.example.studentlessonservlet.manager.StudentManager;
 import com.example.studentlessonservlet.model.Lesson;
 import com.example.studentlessonservlet.model.Student;
+import com.example.studentlessonservlet.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -26,7 +27,8 @@ public class UpdateStudentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Student student = studentManager.getStudentById(Integer.parseInt(req.getParameter("id")));
-        List<Lesson> lesson = lessonManager.getAllLessons();
+        User user = (User) req.getSession().getAttribute("user");
+        List<Lesson> lesson = lessonManager.getLessonsByUser(user.getId());
         req.setAttribute("lesson", lesson);
         req.setAttribute("student", student);
         req.getRequestDispatcher("/WEB-INF/updateStudent.jsp").forward(req, resp);

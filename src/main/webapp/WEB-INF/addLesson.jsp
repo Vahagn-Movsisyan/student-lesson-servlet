@@ -6,9 +6,9 @@
 </head>
 <body class="body_addLessons">
 <h1>Add new lesson</h1>
-<form method="post" action="/addLesson" enctype="multipart/form-data">
+<form method="post" action="/addLesson">
     <%if (session.getAttribute("msg") != null) { %>
-    <span style="color: red; font-weight: bold;">❗<%session.getAttribute("msg");%></span>
+    <span style="color: red; font-weight: bold;">❗<%=session.getAttribute("msg")%></span>
     <%session.removeAttribute("msg");%>
     <%}%>
     Name: <input type="text" name="lessonName"> <br>

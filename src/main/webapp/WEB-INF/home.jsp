@@ -9,5 +9,6 @@
 <br/>
 <a href="/lessons" target="_blank">View all lessons</a>
 <a href="/students" target="_blank">View all students</a>
+<a href="/logout">Logout</a>
 </body>
 </html>
